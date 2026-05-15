@@ -28,13 +28,13 @@ export const authServices = {
             where: {email: loginData.email}
         })
         if(!user) {
-            return {statusCode: 404 , message: "wrong cred", data: null}
+            return {statusCode: 401 , message: "wrong cred", data: null}
         }
 
         const passwordCheck = await  bcrypt.compare(loginData.password, user.password);
 
         if(!passwordCheck) {
-            return {statusCode: 404 , message: "wrong cred", data: null}
+            return {statusCode: 401 , message: "wrong cred", data: null}
         }
 
         return  {statusCode: 200 , message: "success", data: user}

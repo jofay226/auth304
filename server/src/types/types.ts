@@ -6,3 +6,6 @@ export type UserData = {
 
 
 export type LoginData = Omit<UserData, "userName">
+
+
+

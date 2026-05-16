@@ -1,6 +1,8 @@
 import { loginSchema, userSchema } from "../libs/zod/zod.ts"
 import type {Request, Response} from 'express';
 import { authServices } from "../services/auth.services.ts";
+import { generateAccessToken, generateRefreshToken } from "../utils/generateTokens.ts";
+
 
 
 
@@ -26,5 +28,18 @@ export const loginController = async (req: Request, res:Response) => {
         return res.status(finalResult.statusCode).json(finalResult)
     }
 
-    return res.json(finalResult)
+    
+    res.cookie("refreshToken", generateRefreshToken(finalResult.data?.id!),{
+        httpOnly: true,
+        secure: false,
+        sameSite: "strict",
+    })
+
+    return res.json(generateAccessToken(finalResult.data?.id!))
+}
+
+
+
+export const verifyTokenController = async (req: Request, res:Response) => {
+    return res.json({message: "access granted"})
 }
